@@ -1,2 +1,7 @@
-// Route path constants for application navigation
-export default {};
+export const routePaths = {
+  login: '/login',
+  signup: '/signup',
+  dashboard: '/dashboard',
+};
+
+export default routePaths;

@@ -4,10 +4,12 @@ const loadExpress = require("./loaders/express.loader");
 const app = express();
 
 loadExpress(app);
+
 app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
+app.use("/api/auth", require("./modules/auth/auth.routes"));
 app.use(require("./middlewares/errorHandler.middleware"));
 
 module.exports = app;
