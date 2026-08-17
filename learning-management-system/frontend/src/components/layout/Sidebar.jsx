@@ -1,12 +1,18 @@
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as icons from 'lucide-react';
 import { getNavByRole } from '../../routes/navigation';
+import { clearCredentials } from '../../store/authSlice';
 
 const Sidebar = () => {
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const userType = user?.userType || 'student';
   const navItems = getNavByRole(userType);
+
+  const handleLogout = () => {
+    dispatch(clearCredentials());
+  };
 
   return (
     <aside className="sidebar-shell">
@@ -38,6 +44,17 @@ const Sidebar = () => {
           );
         })}
       </nav>
+
+      <div className="sidebar-footer" style={{ marginTop: 'auto', paddingTop: '20px' }}>
+        <button 
+          onClick={handleLogout} 
+          className="sidebar-link" 
+          style={{ width: '100%', background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', color: 'var(--color-charcoal)', fontWeight: '600' }}
+        >
+          <icons.LogOut size={18} />
+          <span>Logout</span>
+        </button>
+      </div>
     </aside>
   );
 };

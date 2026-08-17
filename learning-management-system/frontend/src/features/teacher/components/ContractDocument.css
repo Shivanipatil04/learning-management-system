@@ -1,0 +1,181 @@
+.contract-document-wrapper {
+  background-color: white;
+  padding: 40px;
+  color: #333;
+  font-family: 'Inter', -apple-system, sans-serif;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.contract-doc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.doc-logo-area h2 {
+  margin: 0 0 5px 0;
+  color: #d85a30; /* Terracotta */
+  font-size: 24px;
+}
+
+.doc-logo-area p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.doc-meta {
+  text-align: right;
+  font-size: 13px;
+}
+
+.doc-meta p {
+  margin: 2px 0;
+}
+
+.doc-section {
+  margin-bottom: 25px;
+}
+
+.doc-section h3 {
+  font-size: 16px;
+  color: #1e293b;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.parties-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background: #f8fafc;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+.parties-grid p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.doc-table td {
+  padding: 10px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+}
+
+.doc-table td:first-child {
+  width: 250px;
+  color: #475569;
+}
+
+.revenue-split-box {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.split-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.split-item span {
+  font-size: 13px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.split-item strong {
+  font-size: 24px;
+  color: #d85a30;
+  margin-top: 5px;
+}
+
+.split-divider {
+  width: 2px;
+  height: 40px;
+  background: #e2e8f0;
+}
+
+.terms-block {
+  font-size: 14px;
+  color: #334155;
+  background: #f8fafc;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+.text-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.doc-signatures {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 60px;
+  padding-top: 30px;
+}
+
+.signature-box {
+  width: 45%;
+}
+
+.sig-line {
+  height: 1px;
+  background: #cbd5e1;
+  margin: 40px 0 10px 0;
+}
+
+.digital-signature {
+  margin: 15px 0 10px 0;
+  padding: 10px;
+  border: 1px dashed #22c55e;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.digital-signature .sig-text {
+  display: block;
+  color: #22c55e;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.digital-signature .sig-date {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.signature-box p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+/* Print specific styles for PDF Generation */
+@media print {
+  .contract-document-wrapper {
+    padding: 0;
+    max-width: none;
+  }
+}

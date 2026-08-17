@@ -1,0 +1,140 @@
+.top-header {
+  height: 64px;
+  background-color: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.notification-bell-container {
+  position: relative;
+}
+
+.bell-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-charcoal);
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.bell-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  height: 16px;
+  min-width: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  width: 350px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.dropdown-header {
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+}
+
+.dropdown-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.dropdown-body {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.no-notifications {
+  padding: 24px;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+.notification-item {
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.notification-item.unread {
+  background-color: rgba(216, 90, 48, 0.03); /* slight terracotta tint */
+}
+
+.notification-item h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.95rem;
+  color: var(--color-charcoal);
+}
+
+.notification-item p {
+  margin: 0 0 12px 0;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  line-height: 1.4;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.notification-actions button, .btn-dismiss {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-renew {
+  background-color: var(--color-terracotta);
+  color: white;
+}
+
+.btn-ignore, .btn-dismiss {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+.btn-ignore:hover, .btn-dismiss:hover {
+  background-color: #e2e8f0;
+}
