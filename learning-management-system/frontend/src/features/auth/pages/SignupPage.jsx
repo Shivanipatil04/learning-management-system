@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import apiClient from '../../../services/apiClient';
 import { setCredentials } from '../../../store/authSlice';
+import {validateSignupForm} from '../../../utils/validators';
 
 const SignupPage = () => {
   const dispatch = useDispatch();
@@ -26,8 +27,25 @@ const SignupPage = () => {
     event.preventDefault();
     setLoading(true);
     setError('');
+  
+  const validationError = validateSignupForm({
+  name: form.name,
+  email: form.email,
+  phone: form.phone,
+  password: form.password,
+});
+  if (validationError) {
+    setError(validationError);
+    setLoading(false);
+    return;
+  }
 
-    try {
+    try {const validationError = validateSignupForm({
+  name: form.name,
+  email: form.email,
+  phone: form.phone,
+  password: form.password,
+});
       const response = await apiClient.post('/auth/signup', form);
       const { user, token } = response.data;
 

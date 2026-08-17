@@ -4,6 +4,7 @@ const User = require("../users/user.model");
 const StudentProfile = require("../users/studentProfile.model");
 const TeacherProfile = require("../users/teacherProfile.model");
 const CoachingClassProfile = require("../coachingClass/coachingClassProfile.model");
+const { DEFAULT_PERMISSIONS_BY_ROLE } = require("../permissions/permission.service");
 const { jwtSecret, jwtExpiresIn } = require("../../config/env");
 
 const sanitizeUser = (user) => ({
@@ -71,7 +72,7 @@ const signup = async ({ name, email, phone, password, userType = "student" }) =>
       phone,
       password: hashedPassword,
       userType,
-      permissions: [],
+      permissions: DEFAULT_PERMISSIONS_BY_ROLE[userType] || [],
       isVerified: true,
     });
   } catch (error) {
@@ -142,7 +143,7 @@ const login = async ({ email, password }) => {
       id: user._id,
       email: user.email,
       userType: user.userType,
-      permissions: user.permissions,
+      permissions: user.permissions?.length ? user.permissions : (DEFAULT_PERMISSIONS_BY_ROLE[user.userType] || []),
     },
     jwtSecret,
     { expiresIn: jwtExpiresIn }

@@ -1,10 +1,13 @@
-import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import LoginPage from '../features/auth/pages/LoginPage';
 import SignupPage from '../features/auth/pages/SignupPage';
 import DashboardPage from '../features/auth/pages/DashboardPage';
 import MainLayout from '../components/layout/MainLayout';
 import PrivateRoute from './PrivateRoute';
+import CoursesPage from '../features/courses/pages/CoursesPage';
+import CourseDetailsPage from '../features/courses/pages/CourseDetailsPage';
+import UploadVideoPage from '../features/courses/pages/UploadVideoPage';
 
 const PlaceholderPage = ({ title }) => (
   <div className="dashboard-shell">
@@ -38,11 +41,14 @@ const AppRoutes = () => {
         }
       >
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/my-courses" element={<PlaceholderPage title="My Courses" />} />
+        <Route path="/my-courses" element={<CoursesPage />} />
         <Route path="/wishlist" element={<PlaceholderPage title="Wishlist" />} />
         <Route path="/certificates" element={<PlaceholderPage title="Certificates" />} />
-        <Route path="/my-content" element={<PlaceholderPage title="My Content" />} />
-        <Route path="/upload-video" element={<PlaceholderPage title="Upload Video" />} />
+        <Route path="/my-content" element={<CoursesPage manage />} />
+        <Route path="/courses" element={<CoursesPage />} />
+        <Route path="/course-management" element={<CoursesPage manage />} />
+        <Route path="/courses/:id" element={<CourseDetailsPage />} />
+        <Route path="/upload-video" element={<UploadVideoPage />} />
         <Route path="/live-sessions" element={<PlaceholderPage title="Live Sessions" />} />
         <Route path="/earnings" element={<PlaceholderPage title="Earnings" />} />
         <Route path="/teachers" element={<PlaceholderPage title="Teachers" />} />

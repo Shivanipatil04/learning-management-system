@@ -1,2 +1,1 @@
-// Permission validation middleware
-module.exports = {};
+module.exports = require("../modules/permissions/permissionGuard.middleware");
