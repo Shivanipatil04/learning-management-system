@@ -7,7 +7,7 @@ const CourseCard = ({ course }) => {
   return (
     <div className="course-card">
       <div className="course-card-image">
-        <img src={course.thumbnail} alt={course.title} />
+        <img src={course.thumbnail || '/favicon.svg'} alt={course.title} />
         <button className="wishlist-btn" aria-label="Add to wishlist">
           <Heart size={20} />
         </button>
@@ -15,7 +15,7 @@ const CourseCard = ({ course }) => {
       <div className="course-card-content">
         <div className="course-card-header">
           <span className="course-level">{course.level}</span>
-          <span className="course-price">{course.price === 0 ? 'Free' : `$${course.price}`}</span>
+          <span className="course-price">{course.price === 0 ? 'Free' : `₹${course.price}`}</span>
         </div>
         <h3 className="course-title">{course.title}</h3>
         <p className="course-instructor">by {course.teacher?.name || 'Instructor'}</p>

@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, Clock, BookOpen, User, CheckCircle, Globe, PlayCircle, Heart } from 'lucide-react';
 import apiClient from '../../../services/apiClient';
+import { getCourse, normalizeCourse } from '../../courses/courses.api';
 import '../styles/browse-courses.css'; 
 
 const CourseDetails = () => {
@@ -11,22 +12,24 @@ const CourseDetails = () => {
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
 
-  useEffect(() => {
-    fetchCourseDetails();
-  }, [id]);
-
-  const fetchCourseDetails = async () => {
+  const fetchCourseDetails = useCallback(async () => {
     try {
-      const response = await apiClient.get(`/courses/${id}`);
+      const response = await getCourse(id);
       if (response.data.success) {
-        setCourse(response.data.data);
+        setCourse(normalizeCourse(response.data.data));
       }
     } catch (error) {
       console.error('Failed to fetch course details:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    // Fetching on mount synchronizes the page with the current course id.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchCourseDetails();
+  }, [fetchCourseDetails]);
 
   const handleEnroll = async () => {
     setEnrolling(true);
@@ -112,10 +115,10 @@ const CourseDetails = () => {
 
         <aside className="course-sidebar-container">
           <div className="course-enroll-card">
-            <img src={course.thumbnail} alt={course.title} className="enroll-card-img" />
+            <img src={course.thumbnail || '/favicon.svg'} alt={course.title} className="enroll-card-img" />
             <div className="enroll-card-content">
               <div className="enroll-price">
-                <h2>{course.price === 0 ? 'Free' : `$${course.price}`}</h2>
+                <h2>{course.price === 0 ? 'Free' : `₹${course.price}`}</h2>
               </div>
               
               <button 

@@ -20,15 +20,15 @@ const resolveManagementContext = async (user, action) => {
     return { allowed: true, tenantId, isAdmin: true };
   }
   if (user.userType !== "teacher" || !(await hasAnyPermission(user, actionPermissions))) return { allowed: false, statusCode: 403, message: "Insufficient permission" };
-  // Contract enforcement is intentionally disabled while Contracts is under development.
-  // Teacher ownership remains enforced below and this is the future integration seam.
+  // Active contract validation is centralized in activeContractGuard and runs
+  // before protected Course operations reach this ownership check.
   return { allowed: true, tenantId: user.coachingClassId || null, isAdmin: false };
 };
 
 const assertCourseAccess = async (user, course, action) => {
   const context = await resolveManagementContext(user, action);
   if (!context.allowed) { const error = new Error(context.message); error.statusCode = context.statusCode; throw error; }
-  if (context.tenantId && String(course.coachingClassId) !== String(context.tenantId)) {
+  if (context.tenantId && course.coachingClassId && String(course.coachingClassId) !== String(context.tenantId)) {
     const error = new Error("You are not authorized for this Coaching Class"); error.statusCode = 403; throw error;
   }
   if (!context.isAdmin && (!course.teacherId || String(course.teacherId) !== String(user.id))) {

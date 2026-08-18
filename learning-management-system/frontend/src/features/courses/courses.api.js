@@ -1,5 +1,20 @@
 import apiClient from '../../services/apiClient';
 
+// The backend returns course documents directly. Defaults here bridge older
+// documents that predate the current Course schema without changing the model.
+export const normalizeCourse = (course) => ({
+  ...course,
+  thumbnail: course.thumbnail || '',
+  price: course.price == null ? 0 : course.price,
+  rating: course.rating == null ? 0 : course.rating,
+  reviewCount: course.reviewCount == null ? 0 : course.reviewCount,
+  duration: course.duration || '0 hours',
+  totalLessons: course.totalLessons == null ? 0 : course.totalLessons,
+  level: course.level || 'Beginner',
+  language: course.language || 'English',
+  category: course.category || 'Other',
+});
+
 export const listCourses = (params = {}) => apiClient.get('/courses', { params });
 export const getCourseDashboard = () => apiClient.get('/courses/dashboard');
 export const getCourse = (id) => apiClient.get(`/courses/${id}`);

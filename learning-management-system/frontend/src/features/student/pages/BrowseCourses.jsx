@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Search } from 'lucide-react';
-import apiClient from '../../../services/apiClient';
+import { listCourses, normalizeCourse } from '../../courses/courses.api';
 import CourseCard from '../components/courses/CourseCard';
 import CourseFilters from '../components/courses/CourseFilters';
 import '../styles/browse-courses.css';
@@ -16,15 +16,7 @@ const BrowseCourses = () => {
   const categories = ['All', 'Development', 'Design', 'Business', 'Marketing', 'Other'];
   const sortOptions = ['Most Popular', 'Highest Rated', 'Newest', 'Price: Low to High', 'Price: High to Low'];
 
-  // Debounce search slightly
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchCourses();
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [search, activeCategory, sort, filters]);
-
-  const fetchCourses = async () => {
+  const fetchCourses = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -34,16 +26,24 @@ const BrowseCourses = () => {
       if (filters.price) params.append('price', filters.price);
       if (filters.level) params.append('level', filters.level);
 
-      const response = await apiClient.get(`/courses?${params.toString()}`);
+      const response = await listCourses(Object.fromEntries(params));
       if (response.data.success) {
-        setCourses(response.data.data);
+        const courseData = response.data.data;
+        if (!Array.isArray(courseData)) throw new Error('Invalid course list response');
+        setCourses(courseData.map(normalizeCourse));
       }
     } catch (error) {
       console.error('Failed to fetch courses:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [search, activeCategory, sort, filters]);
+
+  // Debounce search slightly
+  useEffect(() => {
+    const timer = setTimeout(fetchCourses, 300);
+    return () => clearTimeout(timer);
+  }, [fetchCourses]);
 
   return (
     <div className="browse-courses-page">

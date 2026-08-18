@@ -13,6 +13,7 @@ import CourseDetailsPage from '../features/courses/pages/CourseDetailsPage';
 import UploadVideoPage from '../features/courses/pages/UploadVideoPage';
 
 import BrowseCourses from '../features/student/pages/BrowseCourses';
+import StudentCourseDetails from '../features/student/pages/CourseDetails';
 import ContractsManager from '../features/coachingClassAdmin/pages/ContractsManager';
 import MyContract from '../features/teacher/pages/MyContract';
 
@@ -24,6 +25,11 @@ const PlaceholderPage = ({ title }) => (
     </div>
   </div>
 );
+
+const CourseDetailsRoute = () => {
+  const { user } = useSelector((state) => state.auth);
+  return user?.userType === 'student' ? <StudentCourseDetails /> : <CourseDetailsPage />;
+};
 
 const AppRoutes = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -77,7 +83,7 @@ const AppRoutes = () => {
         <Route path="/my-content" element={<CoursesPage manage />} />
         <Route path="/courses" element={<CoursesPage />} />
         <Route path="/course-management" element={<CoursesPage manage />} />
-        <Route path="/courses/:id" element={<CourseDetailsPage />} />
+        <Route path="/courses/:id" element={<CourseDetailsRoute />} />
         <Route path="/upload-video" element={<UploadVideoPage />} />
 
         {/* Student */}
