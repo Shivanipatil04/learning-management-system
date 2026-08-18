@@ -17,6 +17,7 @@ router.post(
 );
 
 router.get("/", controller.list);
+router.get("/recommendations", controller.recommendations);
 
 router.get(
   "/dashboard",
@@ -62,6 +63,13 @@ router.post(
   activeContractGuard,
   videoUpload.single("video"),
   controller.uploadVideo
+);
+
+router.delete(
+  "/:courseId/lessons/:lessonId/video",
+  permissionGuard(["manage_courses", "manage_lessons", "upload_content"]),
+  activeContractGuard,
+  controller.deleteVideo
 );
 
 router.patch(

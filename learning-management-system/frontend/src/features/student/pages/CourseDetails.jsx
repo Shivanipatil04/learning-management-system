@@ -69,7 +69,7 @@ const CourseDetails = () => {
     }
   };
 
-  const handleContinue = () => navigate('/my-courses');
+  const handleContinue = () => navigate(`/courses/${id}/learn`);
 
   if (loading) return <div className="course-details-page loading">Loading...</div>;
   if (!course) return <div className="course-details-page error">Course not found.</div>;
@@ -90,7 +90,7 @@ const CourseDetails = () => {
             </div>
             <div className="meta-item">
               <User size={18} />
-              <span>Created by <strong>{course.teacher?.name || 'Instructor'}</strong></span>
+              <span>Created by <strong>{course.teacher?.name || 'Course team'}</strong></span>
             </div>
           </div>
           
@@ -107,10 +107,8 @@ const CourseDetails = () => {
           <div className="content-section">
             <h2>What you'll learn</h2>
             <ul className="learning-objectives">
-              <li><CheckCircle size={16} className="text-green" /> Build scalable applications from scratch</li>
-              <li><CheckCircle size={16} className="text-green" /> Master advanced concepts and best practices</li>
-              <li><CheckCircle size={16} className="text-green" /> Improve your problem-solving skills</li>
-              <li><CheckCircle size={16} className="text-green" /> Prepare for technical interviews</li>
+              {course.curriculum?.flatMap((section) => section.lessons || []).slice(0, 6).map((lesson) => <li key={lesson._id || lesson.title}><CheckCircle size={16} className="text-green" /> {lesson.title}</li>)}
+              {!course.curriculum?.some((section) => section.lessons?.length) && <li>{course.description || 'Course content will be available after enrollment.'}</li>}
             </ul>
           </div>
 
@@ -162,8 +160,7 @@ const CourseDetails = () => {
                 <p>This course includes:</p>
                 <ul>
                   <li><Clock size={16} /> {course.duration} on-demand video</li>
-                  <li><BookOpen size={16} /> {course.totalLessons} lessons</li>
-                  <li><Star size={16} /> Certificate of completion</li>
+                  <li><BookOpen size={16} /> {course.availableLessonCount ?? course.totalLessons} lessons</li>
                 </ul>
               </div>
             </div>

@@ -4,7 +4,7 @@ import * as icons from 'lucide-react';
 import { getNavByRole } from '../../routes/navigation';
 import { clearCredentials } from '../../store/authSlice';
 
-const Sidebar = () => {
+const Sidebar = ({ collapsed, onToggle }) => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const userType = user?.userType || 'student';
@@ -15,7 +15,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="sidebar-shell">
+    <aside className={`sidebar-shell ${collapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-brand">
         <div className="brand-badge small" aria-label="LearnHub logo">
           <span />
@@ -24,6 +24,7 @@ const Sidebar = () => {
           <span className="learn">Learn</span>
           <span className="hub">Hub</span>
         </div>
+        <button className="sidebar-toggle" type="button" onClick={onToggle} aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}>{collapsed ? '›' : '‹'}</button>
       </div>
 
       <nav className="sidebar-nav" aria-label="Sidebar navigation">
@@ -37,6 +38,7 @@ const Sidebar = () => {
               className={({ isActive }) =>
                 `sidebar-link ${isActive ? 'active' : ''}`
               }
+              title={collapsed ? item.label : undefined}
             >
               <Icon size={18} />
               <span>{item.label}</span>
@@ -45,11 +47,11 @@ const Sidebar = () => {
         })}
       </nav>
 
-      <div className="sidebar-footer" style={{ marginTop: 'auto', paddingTop: '20px' }}>
+      <div className="sidebar-footer">
         <button 
           onClick={handleLogout} 
           className="sidebar-link" 
-          style={{ width: '100%', background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', color: 'var(--color-charcoal)', fontWeight: '600' }}
+          title={collapsed ? 'Logout' : undefined}
         >
           <icons.LogOut size={18} />
           <span>Logout</span>

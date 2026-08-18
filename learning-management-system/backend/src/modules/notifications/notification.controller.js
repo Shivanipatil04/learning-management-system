@@ -4,6 +4,7 @@ exports.getMyNotifications = async (req, res, next) => {
   try {
     const userId = req.user.id || req.user._id;
     const notifications = await Notification.find({ recipientId: userId })
+      .where({ isIgnored: false })
       .sort({ createdAt: -1 })
       .populate("contractId", "contractId startDate endDate");
     

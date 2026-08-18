@@ -1,10 +1,7 @@
 import { Award, Download } from 'lucide-react';
 
 const RecentCertificates = () => {
-  const certificates = [
-    { id: 1, course: 'Advanced React Patterns', issueDate: 'Oct 12, 2023' },
-    { id: 2, course: 'Node.js Backend Architecture', issueDate: 'Sep 05, 2023' },
-  ];
+  const certificates = [];
 
   return (
     <div className="dashboard-section-card side-card">

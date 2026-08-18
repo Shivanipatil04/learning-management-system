@@ -51,11 +51,12 @@ const StudentEnrollmentsPage = () => {
                 <div className="course-card-content">
                   <span className="course-level">{enrollment.status}</span>
                   <h3 className="course-title">{course.title}</h3>
+                  <p className="course-instructor">by {course.teacherId?.name || 'Course team'}</p>
                   <p className="course-instructor">{enrollment.progress}% complete</p>
                   <div className="course-progress-track" aria-label={`${enrollment.progress}% complete`}>
                     <span style={{ width: `${enrollment.progress}%` }} />
                   </div>
-                  <button className="primary-button full-width" type="button" onClick={() => navigate(`/courses/${course._id}`)}>
+                  <button className="primary-button full-width" type="button" onClick={() => navigate(`/courses/${course._id}/learn`)}>
                     <PlayCircle size={17} /> {enrollment.progress > 0 ? 'Continue Learning' : 'Start Learning'}
                   </button>
                 </div>

@@ -2,6 +2,7 @@ const service = require("./course.service");
 const respond = (res, data, status = 200) => res.status(status).json({ success: true, data });
 const create = async (req, res, next) => { try { return respond(res, await service.createCourse(req.user, req.body), 201); } catch (e) { return next(e); } };
 const list = async (req, res, next) => { try { return respond(res, await service.listCourses(req.user, req.query)); } catch (e) { return next(e); } };
+const recommendations = async (req, res, next) => { try { return respond(res, await service.listRecommendations(req.user)); } catch (e) { return next(e); } };
 const dashboard = async (req, res, next) => { try { return respond(res, await service.getCourseDashboard(req.user)); } catch (e) { return next(e); } };
 const get = async (req, res, next) => { try { return respond(res, await service.getCourse(req.user, req.params.id)); } catch (e) { return next(e); } };
 const update = async (req, res, next) => { try { return respond(res, await service.updateCourse(req.user, req.params.id, req.body)); } catch (e) { return next(e); } };
@@ -12,4 +13,5 @@ const addLesson = async (req, res, next) => { try { return respond(res, await se
 const editLesson = async (req, res, next) => { try { return respond(res, await service.updateLesson(req.user, req.params.courseId, req.params.lessonId, req.body)); } catch (e) { return next(e); } };
 const removeLesson = async (req, res, next) => { try { await service.deleteLesson(req.user, req.params.courseId, req.params.lessonId); return res.status(204).send(); } catch (e) { return next(e); } };
 const uploadVideo = async (req, res, next) => { try { const lesson = await service.uploadLessonVideo(req.user, req.params.courseId, req.params.lessonId, req.file); return res.status(200).json({ success: true, message: "Video uploaded successfully", data: { lesson } }); } catch (e) { return next(e); } };
-module.exports = { create, list, dashboard, get, update, remove, publish, lessons, addLesson, editLesson, removeLesson, uploadVideo };
+const deleteVideo = async (req, res, next) => { try { const lesson = await service.deleteLessonVideo(req.user, req.params.courseId, req.params.lessonId); return res.status(200).json({ success: true, message: "Video deleted successfully", data: { lesson } }); } catch (e) { return next(e); } };
+module.exports = { create, list, recommendations, dashboard, get, update, remove, publish, lessons, addLesson, editLesson, removeLesson, uploadVideo, deleteVideo };

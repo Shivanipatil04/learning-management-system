@@ -15,6 +15,10 @@ import UploadVideoPage from '../features/courses/pages/UploadVideoPage';
 import BrowseCourses from '../features/student/pages/BrowseCourses';
 import StudentCourseDetails from '../features/student/pages/CourseDetails';
 import StudentEnrollmentsPage from '../features/student/pages/StudentEnrollmentsPage';
+import StudentLearningPage from '../features/student/pages/StudentLearningPage';
+import StudentProgressPage from '../features/student/pages/StudentProgressPage';
+import ProfilePage from '../features/profile/ProfilePage';
+import EnrollmentVisibilityPage from '../features/enrollments/EnrollmentVisibilityPage';
 import Reviews from '../features/student/pages/Reviews';
 
 import ContractsManager from '../features/coachingClassAdmin/pages/ContractsManager';
@@ -119,6 +123,7 @@ const AppRoutes = () => {
           path="/courses/:id"
           element={<CourseDetailsRoute />}
         />
+        <Route path="/courses/:id/learn" element={<StudentLearningPage />} />
 
         <Route
           path="/upload-video"
@@ -148,12 +153,12 @@ const AppRoutes = () => {
 
         <Route
           path="/profile"
-          element={<PlaceholderPage title="Profile" />}
+          element={<ProfilePage />}
         />
 
         <Route
           path="/my-progress"
-          element={<PlaceholderPage title="My Progress" />}
+          element={<StudentProgressPage />}
         />
 
         <Route
@@ -190,8 +195,9 @@ const AppRoutes = () => {
 
         <Route
           path="/students"
-          element={<PlaceholderPage title="Students" />}
+          element={<EnrollmentVisibilityPage />}
         />
+        <Route path="/enrollments" element={<EnrollmentVisibilityPage />} />
 
         <Route
           path="/users"

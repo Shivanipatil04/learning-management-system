@@ -3,11 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const PendingQuizzes = () => {
   const navigate = useNavigate();
-  const quizzes = [
-    { id: 1, title: 'React Hooks Quiz', course: 'Advanced React', dueDate: 'Tomorrow', status: 'pending' },
-    { id: 2, title: 'JS Fundamentals', course: 'JS Basics', score: '90%', status: 'passed' },
-    { id: 3, title: 'CSS Grid Layout', course: 'Advanced CSS', score: '45%', status: 'failed' },
-  ];
+  const quizzes = [];
 
   return (
     <div className="dashboard-section-card side-card">

@@ -1,11 +1,10 @@
-import { BookOpen, CheckCircle, HelpCircle, Award } from 'lucide-react';
+import { BookOpen, CheckCircle, HelpCircle } from 'lucide-react';
 
-const SummaryCards = () => {
+const SummaryCards = ({ enrolledCount = 0, completedCourses = 0, completedLessons = 0 }) => {
   const stats = [
-    { label: 'Enrolled Courses', value: 4, icon: BookOpen, color: 'blue' },
-    { label: 'Completed Courses', value: 2, icon: CheckCircle, color: 'green' },
-    { label: 'Pending Quizzes', value: 1, icon: HelpCircle, color: 'orange' },
-    { label: 'Certificates Earned', value: 2, icon: Award, color: 'purple' },
+    { label: 'Enrolled Courses', value: enrolledCount, icon: BookOpen, color: 'blue' },
+    { label: 'Completed Courses', value: completedCourses, icon: CheckCircle, color: 'green' },
+    { label: 'Lessons Completed', value: completedLessons, icon: HelpCircle, color: 'orange' },
   ];
 
   return (

@@ -1,0 +1,15 @@
+import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { listCourses } from '../courses/courses.api';
+import { getAdminEnrollments, getCourseStudents } from '../student/enrollments.api';
+
+const EnrollmentVisibilityPage = () => {
+  const role = useSelector((state) => state.auth.user?.userType); const isAdmin = role === 'coachingClassAdmin' || role === 'superAdmin';
+  const [courses, setCourses] = useState([]); const [selected, setSelected] = useState(''); const [rows, setRows] = useState([]); const [loading, setLoading] = useState(true); const [error, setError] = useState('');
+  const load = useCallback(async () => { setLoading(true); setError(''); try { if (isAdmin) { const response = await getAdminEnrollments(); setRows(response.data.data || []); } else { const response = await listCourses({ manage: 'true' }); setCourses(response.data.data || []); } } catch (requestError) { setError(requestError.response?.data?.message || 'Unable to load enrollments.'); } finally { setLoading(false); } }, [isAdmin]);
+  useEffect(() => { load(); }, [load]);
+  const chooseCourse = async (courseId) => { setSelected(courseId); if (!courseId) return setRows([]); setLoading(true); try { const response = await getCourseStudents(courseId); setRows(response.data.data || []); } catch (requestError) { setError(requestError.response?.data?.message || 'Unable to load students.'); } finally { setLoading(false); } };
+  return <main className="course-management-page"><header className="course-page-header"><div><p className="eyebrow">Enrollment visibility</p><h1>{isAdmin ? 'All Enrollments' : 'Course Students'}</h1><p className="page-description">View real enrollment and progress data within your permitted scope.</p></div></header>{!isAdmin && <label className="enrollment-course-select">Course<select value={selected} onChange={(event) => chooseCourse(event.target.value)}><option value="">Select a course</option>{courses.map((course) => <option key={course._id} value={course._id}>{course.title}</option>)}</select></label>}{error && <div className="course-error" role="alert">{error}</div>}{loading ? <p>Loading enrollments…</p> : !rows.length ? <div className="course-empty"><p>{selected || isAdmin ? 'No enrollments found.' : 'Select a course to view its students.'}</p></div> : <div className="enrollment-table-wrap"><table className="enrollment-table"><thead><tr><th>Student</th><th>Course</th><th>Status</th><th>Progress</th><th>Enrolled</th><th>Last lesson</th></tr></thead><tbody>{rows.map((row) => <tr key={row._id}><td>{row.studentId?.name}<small>{row.studentId?.email}</small></td><td>{row.courseId?.title || courses.find((course) => course._id === selected)?.title}</td><td>{row.status}</td><td>{row.progress}% ({row.completedLessons?.length || 0} completed)</td><td>{row.enrolledAt ? new Date(row.enrolledAt).toLocaleDateString() : '—'}</td><td>{row.lastAccessedLesson?.title || '—'}</td></tr>)}</tbody></table></div>}</main>;
+};
+
+export default EnrollmentVisibilityPage;

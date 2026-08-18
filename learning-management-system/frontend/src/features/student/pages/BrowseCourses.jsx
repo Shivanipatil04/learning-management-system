@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Search } from 'lucide-react';
 import { listCourses, normalizeCourse } from '../../courses/courses.api';
+import { getRecommendations } from '../recommendations.api';
 import CourseCard from '../components/courses/CourseCard';
 import CourseFilters from '../components/courses/CourseFilters';
 import '../styles/browse-courses.css';
@@ -12,6 +13,7 @@ const BrowseCourses = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [sort, setSort] = useState('Most Popular');
   const [filters, setFilters] = useState({ price: '', level: '' });
+  const [recommendations, setRecommendations] = useState([]);
 
   const categories = ['All', 'Development', 'Design', 'Business', 'Marketing', 'Other'];
   const sortOptions = ['Most Popular', 'Highest Rated', 'Newest', 'Price: Low to High', 'Price: High to Low'];
@@ -45,6 +47,10 @@ const BrowseCourses = () => {
     return () => clearTimeout(timer);
   }, [fetchCourses]);
 
+  useEffect(() => {
+    getRecommendations().then((response) => setRecommendations((response.data.data || []).map(normalizeCourse))).catch(() => setRecommendations([]));
+  }, []);
+
   return (
     <div className="browse-courses-page">
       <header className="browse-header">
@@ -61,6 +67,8 @@ const BrowseCourses = () => {
           />
         </div>
       </header>
+
+      {recommendations.length > 0 && !search && activeCategory === 'All' && <section className="recommendations-section"><div className="section-heading"><div><p className="eyebrow">Based on your profile</p><h2>Recommended for you</h2></div></div><div className="courses-grid">{recommendations.slice(0, 3).map((course) => <CourseCard key={course._id} course={course} />)}</div></section>}
 
       <div className="category-tabs">
         {categories.map(cat => (

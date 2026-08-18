@@ -20,6 +20,9 @@ const studentProfileSchema = new mongoose.Schema(
         ref: "Course",
       },
     ],
+    education: { type: String, default: "", trim: true, maxlength: 200 },
+    interests: { type: [String], default: [] },
+    preferredCategories: { type: [String], default: [] },
     certificatesEarned: [
       {
         type: mongoose.Schema.Types.ObjectId,

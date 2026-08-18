@@ -27,12 +27,6 @@
   font-size: 1.1rem;
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
 .icon-button {
   background: white;
   border: 1px solid rgba(61, 61, 58, 0.1);
@@ -49,27 +43,6 @@
 
 .icon-button:hover {
   background: var(--color-peach);
-}
-
-.notification-badge {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  width: 8px;
-  height: 8px;
-  background: var(--color-terracotta);
-  border-radius: 50%;
-}
-
-.avatar-placeholder {
-  width: 44px;
-  height: 44px;
-  background: var(--color-terracotta);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
 }
 
 /* Summary Cards */
@@ -462,8 +435,5 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
-  }
-  .header-actions {
-    align-self: flex-end;
   }
 }

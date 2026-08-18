@@ -26,4 +26,20 @@ const progress = async (req, res, next) => {
   try { return respond(res, await service.getCourseProgress(req.user, req.params.courseId)); } catch (error) { return next(error); }
 };
 
-module.exports = { enroll, list, get, getCourse, updateProgress, progress };
+const learning = async (req, res, next) => {
+  try { return respond(res, await service.getLearningData(req.user, req.params.courseId)); } catch (error) { return next(error); }
+};
+
+const studentProgress = async (req, res, next) => {
+  try { return respond(res, await service.getStudentProgress(req.user)); } catch (error) { return next(error); }
+};
+
+const courseStudents = async (req, res, next) => {
+  try { return respond(res, await service.getCourseStudents(req.user, req.params.courseId)); } catch (error) { return next(error); }
+};
+
+const adminEnrollments = async (req, res, next) => {
+  try { return respond(res, await service.getAdminEnrollments(req.user)); } catch (error) { return next(error); }
+};
+
+module.exports = { enroll, list, get, getCourse, updateProgress, progress, learning, studentProgress, courseStudents, adminEnrollments };

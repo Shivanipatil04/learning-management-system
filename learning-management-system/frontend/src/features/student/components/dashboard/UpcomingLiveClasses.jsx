@@ -1,22 +1,7 @@
 import { Calendar, Clock, Video } from 'lucide-react';
 
 const UpcomingLiveClasses = () => {
-  const classes = [
-    {
-      id: 1,
-      title: 'State Management deep dive',
-      instructor: 'John Doe',
-      date: 'Today',
-      time: '2:00 PM',
-    },
-    {
-      id: 2,
-      title: 'UI/UX Principles',
-      instructor: 'Jane Smith',
-      date: 'Tomorrow',
-      time: '10:00 AM',
-    },
-  ];
+  const classes = [];
 
   return (
     <div className="dashboard-section-card">

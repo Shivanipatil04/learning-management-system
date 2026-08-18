@@ -13,6 +13,7 @@ export const normalizeCourse = (course) => ({
   level: course.level || 'Beginner',
   language: course.language || 'English',
   category: course.category || 'Other',
+  teacher: course.teacher || (course.teacherId && typeof course.teacherId === 'object' ? course.teacherId : null),
 });
 
 export const listCourses = (params = {}) => apiClient.get('/courses', { params });
@@ -34,3 +35,4 @@ export const uploadLessonVideo = (courseId, lessonId, file, onUploadProgress) =>
     onUploadProgress,
   });
 };
+export const deleteLessonVideo = (courseId, lessonId) => apiClient.delete(`/courses/${courseId}/lessons/${lessonId}/video`);

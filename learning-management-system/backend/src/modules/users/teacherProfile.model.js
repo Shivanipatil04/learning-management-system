@@ -12,6 +12,9 @@ const teacherProfileSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    education: { type: String, default: "", trim: true, maxlength: 200 },
+    expertise: { type: [String], default: [] },
+    experience: { type: String, default: "", trim: true, maxlength: 100 },
     qualifications: {
       type: [String],
       default: [],

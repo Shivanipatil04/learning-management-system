@@ -5,6 +5,8 @@ const notificationSchema = new mongoose.Schema(
     recipientId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     recipientRole: { type: String, required: true }, // 'teacher', 'coachingClassAdmin'
     contractId: { type: mongoose.Schema.Types.ObjectId, ref: "Contract" },
+    courseId: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
+    eventKey: { type: String, unique: true, sparse: true },
     type: {
       type: String,
       enum: [
@@ -13,6 +15,8 @@ const notificationSchema = new mongoose.Schema(
         "CONTRACT_EXPIRING_1_DAY",
         "CONTRACT_RENEWED",
         "CONTRACT_EXPIRED"
+        ,"COURSE_ENROLLED"
+        ,"COURSE_COMPLETED"
       ],
       required: true
     },
