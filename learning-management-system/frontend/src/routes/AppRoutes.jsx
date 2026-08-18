@@ -10,6 +10,7 @@ import CourseDetails from '../features/student/pages/CourseDetails';
 import ContractsManager from '../features/coachingClassAdmin/pages/ContractsManager';
 import MyContract from '../features/teacher/pages/MyContract';
 import Reviews from '../features/student/pages/Reviews';
+import QuizzesRouter from '../features/quizzes/pages/QuizzesRouter';
 
 const PlaceholderPage = ({ title }) => (
   <div className="dashboard-shell">
@@ -44,7 +45,7 @@ const AppRoutes = () => {
       >
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/my-courses" element={<PlaceholderPage title="My Courses" />} />
-        <Route path="/quizzes" element={<PlaceholderPage title="Quizzes" />} />
+        <Route path="/quizzes" element={<QuizzesRouter />} />
         <Route path="/certificates" element={<PlaceholderPage title="My Certificates" />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/profile" element={<PlaceholderPage title="Profile" />} />
