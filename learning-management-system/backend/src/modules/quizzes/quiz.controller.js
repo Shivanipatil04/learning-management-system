@@ -3,9 +3,6 @@ const QuizAttempt = require("./quizAttempt.model");
 const Course = require("../courses/course.model");
 const StudentProfile = require("../users/studentProfile.model");
 
-// ==========================================
-// TEACHER ENDPOINTS
-// ==========================================
 
 exports.createQuiz = async (req, res, next) => {
   try {
@@ -115,9 +112,6 @@ exports.getTeacherQuizAnalytics = async (req, res, next) => {
   }
 };
 
-// ==========================================
-// STUDENT ENDPOINTS
-// ==========================================
 
 exports.getStudentQuizzes = async (req, res, next) => {
   try {
@@ -221,7 +215,7 @@ exports.submitQuizAttempt = async (req, res, next) => {
       const studentAnswer = answers.find(a => a.questionId === question._id.toString());
       const selected = studentAnswer ? studentAnswer.selectedOptions || [] : [];
       
-      // Check if arrays have same elements
+      
       const isCorrect = question.correctOptions.length === selected.length && 
                         question.correctOptions.every(val => selected.includes(val));
       
