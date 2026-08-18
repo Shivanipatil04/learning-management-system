@@ -14,6 +14,7 @@ import UploadVideoPage from '../features/courses/pages/UploadVideoPage';
 
 import BrowseCourses from '../features/student/pages/BrowseCourses';
 import StudentCourseDetails from '../features/student/pages/CourseDetails';
+import StudentEnrollmentsPage from '../features/student/pages/StudentEnrollmentsPage';
 import Reviews from '../features/student/pages/Reviews';
 
 import ContractsManager from '../features/coachingClassAdmin/pages/ContractsManager';
@@ -36,6 +37,11 @@ const CourseDetailsRoute = () => {
   return user?.userType === 'student'
     ? <StudentCourseDetails />
     : <CourseDetailsPage />;
+};
+
+const MyCoursesRoute = () => {
+  const { user } = useSelector((state) => state.auth);
+  return user?.userType === 'student' ? <StudentEnrollmentsPage /> : <CoursesPage />;
 };
 
 const AppRoutes = () => {
@@ -91,7 +97,7 @@ const AppRoutes = () => {
         {/* Course Management */}
         <Route
           path="/my-courses"
-          element={<CoursesPage />}
+          element={<MyCoursesRoute />}
         />
 
         <Route

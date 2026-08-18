@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, Clock, BookOpen, User, CheckCircle, Globe, PlayCircle, Heart } from 'lucide-react';
-import apiClient from '../../../services/apiClient';
 import { getCourse, normalizeCourse } from '../../courses/courses.api';
+import { enrollStudent, getCourseEnrollment } from '../enrollments.api';
 import '../styles/browse-courses.css'; 
 
 const CourseDetails = () => {
@@ -11,6 +11,9 @@ const CourseDetails = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
+  const [enrollment, setEnrollment] = useState(null);
+  const [enrollmentLoading, setEnrollmentLoading] = useState(true);
+  const [feedback, setFeedback] = useState('');
 
   const fetchCourseDetails = useCallback(async () => {
     try {
@@ -31,21 +34,42 @@ const CourseDetails = () => {
     fetchCourseDetails();
   }, [fetchCourseDetails]);
 
+  const fetchEnrollment = useCallback(async () => {
+    setEnrollmentLoading(true);
+    try {
+      const response = await getCourseEnrollment(id);
+      setEnrollment(response.data.data);
+    } catch (error) {
+      if (error.response?.status !== 404) console.error('Failed to fetch enrollment:', error);
+      setEnrollment(null);
+    } finally {
+      setEnrollmentLoading(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    // A missing enrollment is an expected state for a browseable course.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchEnrollment();
+  }, [fetchEnrollment]);
+
   const handleEnroll = async () => {
     setEnrolling(true);
+    setFeedback('');
     try {
-      const response = await apiClient.post(`/courses/${id}/enroll`);
+      const response = await enrollStudent(id);
       if (response.data.success) {
-        // Redirect to My Courses
-        navigate('/my-courses');
+        setEnrollment(response.data.data);
+        setFeedback('You are enrolled in this course.');
       }
     } catch (error) {
-      console.error('Failed to enroll:', error);
-      alert(error.response?.data?.message || 'Failed to enroll');
+      setFeedback(error.response?.data?.message || 'Failed to enroll');
     } finally {
       setEnrolling(false);
     }
   };
+
+  const handleContinue = () => navigate('/my-courses');
 
   if (loading) return <div className="course-details-page loading">Loading...</div>;
   if (!course) return <div className="course-details-page error">Course not found.</div>;
@@ -121,12 +145,13 @@ const CourseDetails = () => {
                 <h2>{course.price === 0 ? 'Free' : `₹${course.price}`}</h2>
               </div>
               
+              {feedback && <p role="status" className="course-feedback">{feedback}</p>}
               <button 
                 className="primary-button full-width enroll-btn"
-                onClick={handleEnroll}
-                disabled={enrolling}
+                onClick={enrollment ? handleContinue : handleEnroll}
+                disabled={enrolling || enrollmentLoading}
               >
-                {enrolling ? 'Enrolling...' : (course.price === 0 ? 'Enroll Now' : 'Buy Now')}
+                {enrollmentLoading ? 'Checking enrollment…' : enrollment ? 'Continue Learning' : enrolling ? 'Enrolling...' : (course.price === 0 ? 'Enroll Now' : 'Buy Now')}
               </button>
               
               <button className="outline-button full-width wishlist-btn-large">
