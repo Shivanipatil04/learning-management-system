@@ -30,7 +30,7 @@ const TeacherQuizzes = () => {
     try {
       const [qRes, cRes] = await Promise.all([
         apiClient.get('/quizzes/teacher'),
-        apiClient.get('/courses')
+        apiClient.get('/courses?manage=true') // Fetches only teacher's courses
       ]);
       if (qRes.data.success) setQuizzes(qRes.data.data);
       if (cRes.data.success) setCourses(cRes.data.data);

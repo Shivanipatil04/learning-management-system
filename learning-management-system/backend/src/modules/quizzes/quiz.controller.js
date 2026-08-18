@@ -9,8 +9,12 @@ exports.createQuiz = async (req, res, next) => {
     const teacherId = req.user.id || req.user._id;
     const { title, courseId, instructions, status, totalMarks, passingPercentage, timeLimit, maxAttempts, startDate, dueDate, questions } = req.body;
 
-    const course = await Course.findOne({ _id: courseId, teacher: teacherId });
+    const course = await Course.findById(courseId);
     if (!course) {
+      return res.status(404).json({ success: false, message: "Course not found." });
+    }
+
+    if (course.teacherId.toString() !== teacherId.toString()) {
       return res.status(403).json({ success: false, message: "You can only create quizzes for your own courses." });
     }
 
