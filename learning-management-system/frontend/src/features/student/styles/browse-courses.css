@@ -239,6 +239,10 @@
 .course-card-image {
   position: relative;
   height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
 }
 
 .course-card-image img {
@@ -274,6 +278,21 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+}
+
+.course-progress-track {
+  height: 7px;
+  margin: 4px 0 16px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(61, 61, 58, 0.12);
+}
+
+.course-progress-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-terracotta);
 }
 
 .course-card-header {

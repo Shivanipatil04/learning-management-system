@@ -25,7 +25,8 @@ const Reviews = () => {
   const [loading, setLoading] = useState(true);
   
   // Form State
-  const [formData, setFormData] = useState({ rating: 0, comment: '' });
+  const [newReviewForms, setNewReviewForms] = useState({});
+  const [editingFormData, setEditingFormData] = useState({ rating: 0, comment: '' });
   const [submitting, setSubmitting] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
@@ -51,7 +52,10 @@ const Reviews = () => {
   };
 
   const handleReviewSubmit = async (type, targetId) => {
-    if (formData.rating === 0) {
+    const isEditing = !!editingId;
+    const currentData = isEditing ? editingFormData : (newReviewForms[targetId] || { rating: 0, comment: '' });
+
+    if (currentData.rating === 0) {
       alert("Please select a rating from 1 to 5 stars.");
       return;
     }
@@ -60,21 +64,26 @@ const Reviews = () => {
     try {
       const payload = {
         reviewType: type,
-        rating: formData.rating,
-        comment: formData.comment
+        rating: currentData.rating,
+        comment: currentData.comment
       };
       
       if (type === 'course') payload.courseId = targetId;
       if (type === 'teacher') payload.teacherId = targetId;
       
-      if (editingId) {
+      if (isEditing) {
         await apiClient.put(`/reviews/${editingId}`, payload);
+        setEditingFormData({ rating: 0, comment: '' });
+        setEditingId(null);
       } else {
         await apiClient.post('/reviews', payload);
+        setNewReviewForms(prev => {
+          const newState = { ...prev };
+          delete newState[targetId];
+          return newState;
+        });
       }
       
-      setFormData({ rating: 0, comment: '' });
-      setEditingId(null);
       fetchData(); // Refresh all data
     } catch (error) {
       alert(error.response?.data?.message || 'Error submitting review');
@@ -96,13 +105,29 @@ const Reviews = () => {
 
   const startEdit = (review) => {
     setEditingId(review._id);
-    setFormData({ rating: review.rating, comment: review.comment });
+    setEditingFormData({ rating: review.rating, comment: review.comment });
     setActiveTab(review.reviewType);
     // Scroll to top or handle UI state
   };
 
+  // Calculate reviewed status dynamically from myReviews
+  const reviewedCourses = {};
+  const reviewedTeachers = {};
+
+  myReviews.forEach(r => {
+    if (r.reviewType === 'course' && r.courseId) {
+      const id = typeof r.courseId === 'string' ? r.courseId : r.courseId._id;
+      if (id) reviewedCourses[id.toString()] = true;
+    }
+    if (r.reviewType === 'teacher' && r.teacherId) {
+      const id = typeof r.teacherId === 'string' ? r.teacherId : r.teacherId._id;
+      if (id) reviewedTeachers[id.toString()] = true;
+    }
+  });
+
   const hasReviewed = (type, targetId) => {
-    return myReviews.some(r => r.reviewType === type && (type === 'course' ? r.courseId?._id === targetId : r.teacherId?._id === targetId));
+    if (!targetId) return false;
+    return type === 'course' ? !!reviewedCourses[targetId.toString()] : !!reviewedTeachers[targetId.toString()];
   };
 
   if (loading) return <div className="reviews-page">Loading reviews...</div>;
@@ -144,11 +169,14 @@ const Reviews = () => {
                       </div>
                     ) : (
                       <div className="review-form">
-                        <StarRating rating={formData.rating} setRating={(r) => setFormData({...formData, rating: r})} />
+                        <StarRating 
+                          rating={newReviewForms[course._id]?.rating || 0} 
+                          setRating={(r) => setNewReviewForms(prev => ({...prev, [course._id]: {...(prev[course._id] || {comment: ''}), rating: r}}))} 
+                        />
                         <textarea 
                           placeholder="Share your experience with this course..."
-                          value={formData.comment}
-                          onChange={(e) => setFormData({...formData, comment: e.target.value})}
+                          value={newReviewForms[course._id]?.comment || ''}
+                          onChange={(e) => setNewReviewForms(prev => ({...prev, [course._id]: {...(prev[course._id] || {rating: 0}), comment: e.target.value}}))}
                         ></textarea>
                         <button className="primary-button" onClick={() => handleReviewSubmit('course', course._id)} disabled={submitting}>
                           {submitting ? 'Submitting...' : 'Submit Review'}
@@ -185,11 +213,14 @@ const Reviews = () => {
                       </div>
                     ) : (
                       <div className="review-form">
-                        <StarRating rating={formData.rating} setRating={(r) => setFormData({...formData, rating: r})} />
+                        <StarRating 
+                          rating={newReviewForms[teacher._id]?.rating || 0} 
+                          setRating={(r) => setNewReviewForms(prev => ({...prev, [teacher._id]: {...(prev[teacher._id] || {comment: ''}), rating: r}}))} 
+                        />
                         <textarea 
                           placeholder="What was it like learning from this instructor?"
-                          value={formData.comment}
-                          onChange={(e) => setFormData({...formData, comment: e.target.value})}
+                          value={newReviewForms[teacher._id]?.comment || ''}
+                          onChange={(e) => setNewReviewForms(prev => ({...prev, [teacher._id]: {...(prev[teacher._id] || {rating: 0}), comment: e.target.value}}))}
                         ></textarea>
                         <button className="primary-button" onClick={() => handleReviewSubmit('teacher', teacher._id)} disabled={submitting}>
                           {submitting ? 'Submitting...' : 'Submit Review'}
@@ -225,14 +256,14 @@ const Reviews = () => {
                   
                   {editingId === review._id ? (
                     <div className="review-form inline-edit">
-                      <StarRating rating={formData.rating} setRating={(r) => setFormData({...formData, rating: r})} />
+                      <StarRating rating={editingFormData.rating} setRating={(r) => setEditingFormData({...editingFormData, rating: r})} />
                       <textarea 
-                        value={formData.comment}
-                        onChange={(e) => setFormData({...formData, comment: e.target.value})}
+                        value={editingFormData.comment}
+                        onChange={(e) => setEditingFormData({...editingFormData, comment: e.target.value})}
                       ></textarea>
                       <div className="edit-actions">
                         <button className="primary-button" onClick={() => handleReviewSubmit(review.reviewType, review.reviewType === 'course' ? review.courseId?._id : review.teacherId?._id)}>Save Changes</button>
-                        <button className="text-button" onClick={() => { setEditingId(null); setFormData({rating: 0, comment: ''}); }}>Cancel</button>
+                        <button className="text-button" onClick={() => { setEditingId(null); setEditingFormData({rating: 0, comment: ''}); }}>Cancel</button>
                       </div>
                     </div>
                   ) : (

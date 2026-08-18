@@ -14,12 +14,16 @@ import UploadVideoPage from '../features/courses/pages/UploadVideoPage';
 
 import BrowseCourses from '../features/student/pages/BrowseCourses';
 import StudentCourseDetails from '../features/student/pages/CourseDetails';
+import StudentEnrollmentsPage from '../features/student/pages/StudentEnrollmentsPage';
 import Reviews from '../features/student/pages/Reviews';
 
 import ContractsManager from '../features/coachingClassAdmin/pages/ContractsManager';
 import MyContract from '../features/teacher/pages/MyContract';
 
 import QuizzesRouter from '../features/quizzes/pages/QuizzesRouter';
+import TeacherCertificates from '../features/certificates/pages/TeacherCertificates';
+import MyCertificates from '../features/certificates/pages/MyCertificates';
+
 
 const PlaceholderPage = ({ title }) => (
   <div className="dashboard-shell">
@@ -36,6 +40,17 @@ const CourseDetailsRoute = () => {
   return user?.userType === 'student'
     ? <StudentCourseDetails />
     : <CourseDetailsPage />;
+};
+
+
+const CertificatesRoute = () => {
+  const { user } = useSelector((state) => state.auth);
+  return user?.userType === 'student' ? <MyCertificates /> : <TeacherCertificates />;
+};
+
+const MyCoursesRoute = () => {
+  const { user } = useSelector((state) => state.auth);
+  return user?.userType === 'student' ? <StudentEnrollmentsPage /> : <CoursesPage />;
 };
 
 const AppRoutes = () => {
@@ -91,7 +106,7 @@ const AppRoutes = () => {
         {/* Course Management */}
         <Route
           path="/my-courses"
-          element={<CoursesPage />}
+          element={<MyCoursesRoute />}
         />
 
         <Route
@@ -137,7 +152,7 @@ const AppRoutes = () => {
 
         <Route
           path="/certificates"
-          element={<PlaceholderPage title="My Certificates" />}
+          element={<CertificatesRoute />}
         />
 
         <Route

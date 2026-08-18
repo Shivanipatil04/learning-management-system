@@ -2,6 +2,7 @@ const Review = require("./review.model");
 const Course = require("../courses/course.model");
 const TeacherProfile = require("../users/teacherProfile.model");
 const StudentProfile = require("../users/studentProfile.model");
+const Enrollment = require("../enrollments/enrollment.model");
 
 // Helper function to update averages
 const updateAverages = async (reviewType, targetId) => {
@@ -37,7 +38,12 @@ exports.createReview = async (req, res, next) => {
     }
 
     if (reviewType === "course") {
-      if (!studentProfile.enrolledCourses.includes(courseId)) {
+      const isEnrolled = await Enrollment.findOne({
+        studentId,
+        courseId,
+        status: { $in: ["ENROLLED", "IN_PROGRESS", "COMPLETED"] }
+      });
+      if (!isEnrolled) {
         return res.status(403).json({ success: false, message: "You are not enrolled in this course" });
       }
       const existing = await Review.findOne({ studentId, courseId, reviewType: "course" });
@@ -46,12 +52,18 @@ exports.createReview = async (req, res, next) => {
       }
     } else if (reviewType === "teacher") {
       // Find courses the student is enrolled in that are taught by this teacher
-      const enrolledCourses = await Course.find({ 
-        _id: { $in: studentProfile.enrolledCourses },
-        teacher: teacherId
-      });
+      const enrollments = await Enrollment.find({
+        studentId,
+        status: { $in: ["ENROLLED", "IN_PROGRESS", "COMPLETED"] }
+      }).populate("courseId");
       
-      if (enrolledCourses.length === 0) {
+      const hasTakenCourse = enrollments.some(e => 
+        e.courseId && 
+        e.courseId.teacherId && 
+        e.courseId.teacherId.toString() === teacherId.toString()
+      );
+      
+      if (!hasTakenCourse) {
         return res.status(403).json({ success: false, message: "You have not taken any courses with this teacher" });
       }
       const existing = await Review.findOne({ studentId, teacherId, reviewType: "teacher" });
@@ -83,7 +95,7 @@ exports.getStudentReviews = async (req, res, next) => {
   try {
     const studentId = req.user._id || req.user.id;
     const reviews = await Review.find({ studentId })
-      .populate("courseId", "title thumbnail teacher")
+      .populate("courseId", "title thumbnail teacherId")
       .populate("teacherId", "name")
       .sort({ createdAt: -1 });
 
@@ -96,18 +108,29 @@ exports.getStudentReviews = async (req, res, next) => {
 exports.getReviewableItems = async (req, res, next) => {
   try {
     const studentId = req.user._id || req.user.id;
-    const studentProfile = await StudentProfile.findOne({ userId: studentId });
     
-    if (!studentProfile) {
-      return res.status(200).json({ success: true, data: { courses: [], teachers: [] } });
-    }
+    // Fetch real enrollments from the Enrollment collection
+    const enrollments = await Enrollment.find({
+      studentId: studentId,
+      status: { $in: ["ENROLLED", "IN_PROGRESS", "COMPLETED"] }
+    }).populate({
+      path: "courseId",
+      populate: {
+        path: "teacherId",
+        select: "name"
+      }
+    });
 
-    // Populate courses to get teacher info
-    const courses = await Course.find({ _id: { $in: studentProfile.enrolledCourses } })
-      .populate("teacher", "name");
+    const courses = enrollments
+      .map(en => en.courseId)
+      .filter(course => course !== null); // filter out deleted courses
 
     const teachersMap = new Map();
     courses.forEach(course => {
+      // Ensure we map teacherId back to teacher so frontend does not break
+      if (course.teacherId) {
+        course.teacher = course.teacherId;
+      }
       if (course.teacher && course.teacher._id) {
         if (!teachersMap.has(course.teacher._id.toString())) {
           teachersMap.set(course.teacher._id.toString(), {
@@ -116,7 +139,10 @@ exports.getReviewableItems = async (req, res, next) => {
             coursesTaught: [course.title]
           });
         } else {
-          teachersMap.get(course.teacher._id.toString()).coursesTaught.push(course.title);
+          const teacherObj = teachersMap.get(course.teacher._id.toString());
+          if (!teacherObj.coursesTaught.includes(course.title)) {
+            teacherObj.coursesTaught.push(course.title);
+          }
         }
       }
     });
