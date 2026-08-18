@@ -56,7 +56,7 @@ exports.getCourseById = async (req, res, next) => {
 exports.enrollInCourse = async (req, res, next) => {
   try {
     const courseId = req.params.id;
-    const userId = req.user._id; // Assuming auth middleware adds user
+    const userId = req.user.id || req.user._id; // JWT payload often uses .id
 
     let profile = await StudentProfile.findOne({ userId });
     

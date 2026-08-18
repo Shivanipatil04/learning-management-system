@@ -9,6 +9,7 @@ import BrowseCourses from '../features/student/pages/BrowseCourses';
 import CourseDetails from '../features/student/pages/CourseDetails';
 import ContractsManager from '../features/coachingClassAdmin/pages/ContractsManager';
 import MyContract from '../features/teacher/pages/MyContract';
+import Reviews from '../features/student/pages/Reviews';
 
 const PlaceholderPage = ({ title }) => (
   <div className="dashboard-shell">
@@ -45,7 +46,7 @@ const AppRoutes = () => {
         <Route path="/my-courses" element={<PlaceholderPage title="My Courses" />} />
         <Route path="/quizzes" element={<PlaceholderPage title="Quizzes" />} />
         <Route path="/certificates" element={<PlaceholderPage title="My Certificates" />} />
-        <Route path="/reviews" element={<PlaceholderPage title="Reviews" />} />
+        <Route path="/reviews" element={<Reviews />} />
         <Route path="/profile" element={<PlaceholderPage title="Profile" />} />
         <Route path="/my-content" element={<PlaceholderPage title="My Content" />} />
         <Route path="/upload-video" element={<PlaceholderPage title="Upload Video" />} />

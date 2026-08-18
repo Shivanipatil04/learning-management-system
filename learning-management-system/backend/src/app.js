@@ -14,6 +14,7 @@ app.use("/api/courses", require("./modules/courses/course.routes"));
 app.use("/api/contracts", require("./modules/contracts/contract.routes"));
 app.use("/api/users", require("./modules/users/user.routes"));
 app.use("/api/notifications", require("./modules/notifications/notification.routes"));
+app.use("/api/reviews", require("./modules/reviews/review.routes"));
 app.use(require("./middlewares/errorHandler.middleware"));
 
 module.exports = app;
