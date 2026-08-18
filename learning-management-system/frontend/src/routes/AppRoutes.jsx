@@ -14,8 +14,12 @@ import UploadVideoPage from '../features/courses/pages/UploadVideoPage';
 
 import BrowseCourses from '../features/student/pages/BrowseCourses';
 import StudentCourseDetails from '../features/student/pages/CourseDetails';
+import Reviews from '../features/student/pages/Reviews';
+
 import ContractsManager from '../features/coachingClassAdmin/pages/ContractsManager';
 import MyContract from '../features/teacher/pages/MyContract';
+
+import QuizzesRouter from '../features/quizzes/pages/QuizzesRouter';
 
 const PlaceholderPage = ({ title }) => (
   <div className="dashboard-shell">
@@ -28,7 +32,10 @@ const PlaceholderPage = ({ title }) => (
 
 const CourseDetailsRoute = () => {
   const { user } = useSelector((state) => state.auth);
-  return user?.userType === 'student' ? <StudentCourseDetails /> : <CourseDetailsPage />;
+
+  return user?.userType === 'student'
+    ? <StudentCourseDetails />
+    : <CourseDetailsPage />;
 };
 
 const AppRoutes = () => {
@@ -76,41 +83,73 @@ const AppRoutes = () => {
         }
       >
         {/* Dashboard */}
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route
+          path="/dashboard"
+          element={<DashboardPage />}
+        />
 
         {/* Course Management */}
-        <Route path="/my-courses" element={<CoursesPage />} />
-        <Route path="/my-content" element={<CoursesPage manage />} />
-        <Route path="/courses" element={<CoursesPage />} />
-        <Route path="/course-management" element={<CoursesPage manage />} />
-        <Route path="/courses/:id" element={<CourseDetailsRoute />} />
-        <Route path="/upload-video" element={<UploadVideoPage />} />
+        <Route
+          path="/my-courses"
+          element={<CoursesPage />}
+        />
+
+        <Route
+          path="/my-content"
+          element={<CoursesPage manage />}
+        />
+
+        <Route
+          path="/courses"
+          element={<CoursesPage />}
+        />
+
+        <Route
+          path="/course-management"
+          element={<CoursesPage manage />}
+        />
+
+        <Route
+          path="/courses/:id"
+          element={<CourseDetailsRoute />}
+        />
+
+        <Route
+          path="/upload-video"
+          element={<UploadVideoPage />}
+        />
 
         {/* Student */}
-        <Route
-          path="/quizzes"
-          element={<PlaceholderPage title="Quizzes" />}
-        />
-        <Route
-          path="/certificates"
-          element={<PlaceholderPage title="My Certificates" />}
-        />
-        <Route
-          path="/reviews"
-          element={<PlaceholderPage title="Reviews" />}
-        />
-        <Route
-          path="/profile"
-          element={<PlaceholderPage title="Profile" />}
-        />
         <Route
           path="/browse-courses"
           element={<BrowseCourses />}
         />
+
+        <Route
+          path="/quizzes"
+          element={<QuizzesRouter />}
+        />
+
+        <Route
+          path="/reviews"
+          element={<Reviews />}
+        />
+
+        <Route
+          path="/certificates"
+          element={<PlaceholderPage title="My Certificates" />}
+        />
+
+        <Route
+          path="/profile"
+          element={<PlaceholderPage title="Profile" />}
+        />
+
         <Route
           path="/my-progress"
           element={<PlaceholderPage title="My Progress" />}
         />
+
         <Route
           path="/wishlist"
           element={<PlaceholderPage title="Wishlist" />}
@@ -121,6 +160,7 @@ const AppRoutes = () => {
           path="/contracts"
           element={<ContractsManager />}
         />
+
         <Route
           path="/my-contract"
           element={<MyContract />}
@@ -131,42 +171,52 @@ const AppRoutes = () => {
           path="/live-sessions"
           element={<PlaceholderPage title="Live Sessions" />}
         />
+
         <Route
           path="/earnings"
           element={<PlaceholderPage title="Earnings" />}
         />
+
         <Route
           path="/teachers"
           element={<PlaceholderPage title="Teachers" />}
         />
+
         <Route
           path="/students"
           element={<PlaceholderPage title="Students" />}
         />
+
         <Route
           path="/users"
           element={<PlaceholderPage title="Users" />}
         />
+
         <Route
           path="/content-approval"
           element={<PlaceholderPage title="Content Approval" />}
         />
+
         <Route
           path="/analytics"
           element={<PlaceholderPage title="Analytics" />}
         />
+
         <Route
           path="/revenue"
           element={<PlaceholderPage title="Revenue" />}
         />
+
         <Route
           path="/settings"
           element={<PlaceholderPage title="Settings" />}
         />
+
         <Route
           path="/live-stream"
           element={<PlaceholderPage title="Live Stream" />}
         />
+
         <Route
           path="/live-class"
           element={<PlaceholderPage title="Live Class" />}

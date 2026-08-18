@@ -1,0 +1,217 @@
+.reviews-page {
+  padding: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  color: #1e293b;
+  margin: 0 0 10px 0;
+}
+
+.page-header p {
+  color: #64748b;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+.reviews-tabs {
+  display: flex;
+  gap: 20px;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 30px;
+}
+
+.reviews-tabs button {
+  background: none;
+  border: none;
+  padding: 10px 5px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.reviews-tabs button.active {
+  color: #d85a30;
+}
+
+.reviews-tabs button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #d85a30;
+}
+
+.review-list, .my-reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.review-card, .my-review-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.review-card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.thumb-small {
+  width: 80px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.teacher-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #d85a30;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.review-card-header h3 {
+  margin: 0 0 5px 0;
+  color: #1e293b;
+  font-size: 18px;
+}
+
+.subtitle {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.star-rating {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.star {
+  color: #cbd5e1;
+}
+
+.star.interactive {
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.star.interactive:hover {
+  transform: scale(1.1);
+}
+
+.star.filled {
+  color: #fbbf24; /* Yellow */
+  fill: #fbbf24;
+}
+
+.review-form textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: inherit;
+  margin-bottom: 15px;
+  resize: vertical;
+}
+
+.review-form textarea:focus {
+  outline: none;
+  border-color: #d85a30;
+}
+
+.reviewed-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background-color: #f0fdf4;
+  color: #166534;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.my-review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.type-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.type-badge.course {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+.type-badge.teacher {
+  background-color: #fce7f3;
+  color: #9d174d;
+}
+
+.my-review-card h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.stars-display {
+  margin-bottom: 15px;
+}
+
+.comment-text {
+  color: #334155;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.review-actions {
+  display: flex;
+  gap: 15px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 15px;
+}
+
+.inline-edit {
+  margin-top: 15px;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
